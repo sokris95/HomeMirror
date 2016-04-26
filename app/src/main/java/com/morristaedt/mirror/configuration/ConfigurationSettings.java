@@ -70,7 +70,8 @@ public class ConfigurationSettings {
 
     public void setIsCelsius(boolean isCelsius) {
         SharedPreferences.Editor editor = mSharedPrefs.edit();
-        editor.putString(FORECAST_UNITS, isCelsius ? ForecastRequest.UNITS_SI : ForecastRequest.UNITS_US);
+        mForecastUnits = isCelsius ? ForecastRequest.UNITS_SI : ForecastRequest.UNITS_US;
+        editor.putString(FORECAST_UNITS, mForecastUnits);
         editor.apply();
     }
 
