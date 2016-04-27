@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ConfigurationSettings.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.morristaedt.mirror.configuration</a> &gt; <span class="el_source">ConfigurationSettings.java</span></div><h1>ConfigurationSettings.java</h1><pre class="source lang-java linenums">package com.morristaedt.mirror.configuration;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
+import android.text.TextUtils;
+
+import com.morristaedt.mirror.BuildConfig;
+import com.morristaedt.mirror.requests.ForecastRequest;
+
+/**
+ * Created by HannahMitt on 9/26/15.
+ */
+public class ConfigurationSettings {
+
+    /**
+     * Hardcode on to enable features outside of their regularly scheduled hours
+     */
+    private static final boolean DEMO_MODE = false;
+
+    private static final String PREFS_MIRROR = &quot;MirrorPrefs&quot;;
+
+    private static final String FORECAST_UNITS = &quot;forecast_units&quot;;
+    private static final String BIKING_HINT = &quot;biking_hint&quot;;
+    private static final String USE_MOOD_DETECTION = &quot;mood_detection&quot;;
+    private static final String SHOW_CALENDAR = &quot;show_calendar&quot;;
+    private static final String SHOW_HEADLINE = &quot;show_headline&quot;;
+    private static final String SHOW_XKCD = &quot;xkcd&quot;;
+    private static final String INVERT_XKCD = &quot;invert_xkcd&quot;;
+    private static final String LAT = &quot;lat&quot;;
+    private static final String LON = &quot;lon&quot;;
+    private static final String STOCK_TICKER = &quot;stock_ticker&quot;;
+
+    @NonNull
+    private SharedPreferences mSharedPrefs;
+
+    private String mForecastUnits;
+
+    private boolean mShowBikingHint;
+    private boolean mShowMoodDetection;
+    private boolean mShowNextCalendarEvent;
+    private boolean mShowNewsHeadline;
+    private boolean mShowXKCD;
+    private boolean mInvertXKCD;
+
+    private String mLatitude;
+    private String mLongitude;
+
+    private String mStockTickerSymbol;
+
+<span class="fc" id="L51">    public ConfigurationSettings(Context context) {</span>
+<span class="fc" id="L52">        mSharedPrefs = context.getSharedPreferences(PREFS_MIRROR, Context.MODE_PRIVATE);</span>
+<span class="fc" id="L53">        readPrefs();</span>
+<span class="fc" id="L54">    }</span>
+
+    private void readPrefs() {
+<span class="fc" id="L57">        mForecastUnits = mSharedPrefs.getString(FORECAST_UNITS, ForecastRequest.UNITS_US);</span>
+<span class="fc" id="L58">        mShowBikingHint = mSharedPrefs.getBoolean(BIKING_HINT, false);</span>
+<span class="fc" id="L59">        mShowMoodDetection = mSharedPrefs.getBoolean(USE_MOOD_DETECTION, false);</span>
+<span class="fc" id="L60">        mShowNextCalendarEvent = mSharedPrefs.getBoolean(SHOW_CALENDAR, false);</span>
+<span class="fc" id="L61">        mShowNewsHeadline = mSharedPrefs.getBoolean(SHOW_HEADLINE, false);</span>
+<span class="fc" id="L62">        mShowXKCD = mSharedPrefs.getBoolean(SHOW_XKCD, false);</span>
+<span class="fc" id="L63">        mInvertXKCD = mSharedPrefs.getBoolean(INVERT_XKCD, false);</span>
+
+<span class="fc" id="L65">        mLatitude = mSharedPrefs.getString(LAT, &quot;&quot;);</span>
+<span class="fc" id="L66">        mLongitude = mSharedPrefs.getString(LON, &quot;&quot;);</span>
+
+<span class="fc" id="L68">        mStockTickerSymbol = mSharedPrefs.getString(STOCK_TICKER, &quot;&quot;);</span>
+<span class="fc" id="L69">    }</span>
+
+    public void setIsCelsius(boolean isCelsius) {
+<span class="fc" id="L72">        SharedPreferences.Editor editor = mSharedPrefs.edit();</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">        mForecastUnits = isCelsius ? ForecastRequest.UNITS_SI : ForecastRequest.UNITS_US;</span>
+<span class="fc" id="L74">        editor.putString(FORECAST_UNITS, mForecastUnits);</span>
+<span class="fc" id="L75">        editor.apply();</span>
+<span class="fc" id="L76">    }</span>
+
+    public void setShowBikingHint(boolean show) {
+<span class="fc" id="L79">        mShowBikingHint = show;</span>
+<span class="fc" id="L80">        SharedPreferences.Editor editor = mSharedPrefs.edit();</span>
+<span class="fc" id="L81">        editor.putBoolean(BIKING_HINT, show);</span>
+<span class="fc" id="L82">        editor.apply();</span>
+<span class="fc" id="L83">    }</span>
+
+    public void setShowMoodDetection(boolean show) {
+<span class="fc" id="L86">        mShowMoodDetection = show;</span>
+<span class="fc" id="L87">        SharedPreferences.Editor editor = mSharedPrefs.edit();</span>
+<span class="fc" id="L88">        editor.putBoolean(USE_MOOD_DETECTION, show);</span>
+<span class="fc" id="L89">        editor.apply();</span>
+<span class="fc" id="L90">    }</span>
+
+    public void setShowNextCalendarEvent(boolean show) {
+<span class="fc" id="L93">        mShowNextCalendarEvent = show;</span>
+<span class="fc" id="L94">        SharedPreferences.Editor editor = mSharedPrefs.edit();</span>
+<span class="fc" id="L95">        editor.putBoolean(SHOW_CALENDAR, show);</span>
+<span class="fc" id="L96">        editor.apply();</span>
+<span class="fc" id="L97">    }</span>
+
+    public void setShowNewsHeadline(boolean show) {
+<span class="fc" id="L100">        mShowNewsHeadline = show;</span>
+<span class="fc" id="L101">        SharedPreferences.Editor editor = mSharedPrefs.edit();</span>
+<span class="fc" id="L102">        editor.putBoolean(SHOW_HEADLINE, show);</span>
+<span class="fc" id="L103">        editor.apply();</span>
+<span class="fc" id="L104">    }</span>
+
+    public void setXKCDPreference(boolean showXKCD, boolean invertXKCDColors) {
+<span class="fc" id="L107">        mShowXKCD = showXKCD;</span>
+<span class="fc" id="L108">        mInvertXKCD = invertXKCDColors;</span>
+<span class="fc" id="L109">        SharedPreferences.Editor editor = mSharedPrefs.edit();</span>
+<span class="fc" id="L110">        editor.putBoolean(SHOW_XKCD, showXKCD);</span>
+<span class="fc" id="L111">        editor.putBoolean(INVERT_XKCD, invertXKCDColors);</span>
+<span class="fc" id="L112">        editor.apply();</span>
+<span class="fc" id="L113">    }</span>
+
+    public void setLatLon(String latitude, String longitude) {
+<span class="fc" id="L116">        mLatitude = latitude.trim();</span>
+<span class="fc" id="L117">        mLongitude = longitude.trim();</span>
+
+<span class="fc" id="L119">        SharedPreferences.Editor editor = mSharedPrefs.edit();</span>
+<span class="fc" id="L120">        editor.putString(LAT, mLatitude);</span>
+<span class="fc" id="L121">        editor.putString(LON, mLongitude);</span>
+<span class="fc" id="L122">        editor.apply();</span>
+<span class="fc" id="L123">    }</span>
+
+    public void setStockTickerSymbol(String tickerSymbol) {
+<span class="fc" id="L126">        mStockTickerSymbol = tickerSymbol.replace(&quot;$&quot;, &quot;&quot;).trim();</span>
+
+<span class="fc" id="L128">        SharedPreferences.Editor editor = mSharedPrefs.edit();</span>
+<span class="fc" id="L129">        editor.putString(STOCK_TICKER, mStockTickerSymbol);</span>
+<span class="fc" id="L130">        editor.apply();</span>
+<span class="fc" id="L131">    }</span>
+
+    public boolean getIsCelsius() {
+<span class="fc" id="L134">        return ForecastRequest.UNITS_SI.equals(mForecastUnits);</span>
+    }
+
+    public String getForecastUnits() {
+<span class="nc" id="L138">        return mForecastUnits;</span>
+    }
+
+    public boolean showBikingHint() {
+<span class="fc" id="L142">        return mShowBikingHint;</span>
+    }
+
+    public boolean showMoodDetection() {
+<span class="fc" id="L146">        return mShowMoodDetection;</span>
+    }
+
+    public boolean showNextCalendarEvent() {
+<span class="fc" id="L150">        return mShowNextCalendarEvent;</span>
+    }
+
+    public boolean showNewsHeadline() {
+<span class="fc" id="L154">        return mShowNewsHeadline;</span>
+    }
+
+    public boolean showXKCD() {
+<span class="fc" id="L158">        return mShowXKCD;</span>
+    }
+
+    public boolean invertXKCD() {
+<span class="fc" id="L162">        return mInvertXKCD;</span>
+    }
+
+    public String getLatitude() {
+<span class="fc" id="L166">        return mLatitude;</span>
+    }
+
+    public String getLongitude() {
+<span class="fc" id="L170">        return mLongitude;</span>
+    }
+
+    public boolean showStock() {
+<span class="nc bnc" id="L174" title="All 2 branches missed.">        return !TextUtils.isEmpty(mStockTickerSymbol);</span>
+    }
+
+    public String getStockTickerSymbol() {
+<span class="fc" id="L178">        return mStockTickerSymbol;</span>
+    }
+
+    public static boolean isDebugBuild() {
+<span class="fc" id="L182">        return BuildConfig.DEBUG;</span>
+    }
+
+    /**
+     * Whether we're ignoring timing rules for features
+     *
+     * @return
+     */
+    public static boolean isDemoMode() {
+<span class="nc" id="L191">        return DEMO_MODE;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>
